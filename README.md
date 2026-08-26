@@ -2,6 +2,8 @@
 
 Calculadora de custos de viagem, pedagios, combustivel e despesas operacionais para automoveis, motocicletas, caminhoes e onibus.
 
+![Uploading image.png…]()
+
 ---
 
 ## 1. Visao Geral
