@@ -46,27 +46,29 @@ export const ExtraExpensesSection: React.FC<ExtraExpensesSectionProps> = ({
     (expenses.customItems || []).reduce((s, i) => s + i.value, 0);
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all">
+    <div className="rounded-3xl bg-white dark:bg-[#11192e] border border-slate-200/90 dark:border-slate-800/90 shadow-lg shadow-slate-900/5 dark:shadow-black/40 overflow-hidden transition-all">
       {/* Header / Accordion trigger */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 text-left transition-colors"
+        className="w-full p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/30 text-left transition-colors"
       >
-        <div className="flex items-center gap-2">
-          <Receipt className="w-4 h-4 text-brand-500" />
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center">
+            <Receipt className="w-4 h-4" />
+          </div>
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
               Outros Gastos & Diárias
             </h3>
             <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Alimentação, hospedagem, motorista, manutenção
+              Alimentação, hospedagem, diária de motorista, manutenção
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {totalExtras > 0 && (
-            <span className="text-xs font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-extrabold text-purple-600 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/70 border border-purple-200 dark:border-purple-900/60 px-3 py-1 rounded-xl shadow-sm">
               + R$ {totalExtras.toFixed(2)}
             </span>
           )}
@@ -80,11 +82,11 @@ export const ExtraExpensesSection: React.FC<ExtraExpensesSectionProps> = ({
 
       {/* Accordion Content */}
       {isOpen && (
-        <div className="p-4 pt-0 border-t border-slate-100 dark:border-slate-800/60 space-y-3.5 mt-2">
+        <div className="p-4 sm:p-5 pt-0 border-t border-slate-100 dark:border-slate-800/80 space-y-4 mt-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Food */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
                 <Utensils className="w-3.5 h-3.5 text-amber-500" />
                 Alimentação (R$)
               </label>
@@ -97,13 +99,13 @@ export const ExtraExpensesSection: React.FC<ExtraExpensesSectionProps> = ({
                 onChange={(e) =>
                   onUpdateExpenses({ food: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
 
             {/* Lodging */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
                 <Hotel className="w-3.5 h-3.5 text-indigo-500" />
                 Hospedagem (R$)
               </label>
@@ -116,13 +118,13 @@ export const ExtraExpensesSection: React.FC<ExtraExpensesSectionProps> = ({
                 onChange={(e) =>
                   onUpdateExpenses({ lodging: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
 
             {/* Driver Per Diem */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
                 <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
                 Diária Motorista (R$)
               </label>
@@ -135,13 +137,13 @@ export const ExtraExpensesSection: React.FC<ExtraExpensesSectionProps> = ({
                 onChange={(e) =>
                   onUpdateExpenses({ driverPerDiem: parseFloat(e.target.value) || 0 })
                 }
-                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
 
             {/* Maintenance / Wear & tear per km */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
                 <Wrench className="w-3.5 h-3.5 text-rose-500" />
                 Desgaste / Manut. (R$/km)
               </label>
@@ -156,33 +158,33 @@ export const ExtraExpensesSection: React.FC<ExtraExpensesSectionProps> = ({
                     maintenancePerKm: parseFloat(e.target.value) || 0,
                   })
                 }
-                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
           </div>
 
           {/* Custom Items List */}
           {expenses.customItems && expenses.customItems.length > 0 && (
-            <div className="space-y-1.5 pt-2">
-              <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 block">
-                Itens Personalizados
+            <div className="space-y-2 pt-2">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
+                Itens Personalizados Adicionados
               </span>
               {expenses.customItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between px-3 py-1.5 bg-slate-50 dark:bg-slate-800/80 rounded-xl text-xs border border-slate-200/60 dark:border-slate-700/60"
+                  className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-[#162039] rounded-xl text-xs border border-slate-200/80 dark:border-slate-700/60"
                 >
-                  <span className="text-slate-700 dark:text-slate-300 font-medium">
+                  <span className="text-slate-800 dark:text-slate-200 font-semibold">
                     {item.name}
                   </span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900 dark:text-slate-100">
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-extrabold text-slate-900 dark:text-white">
                       R$ {item.value.toFixed(2)}
                     </span>
                     <button
                       type="button"
                       onClick={() => onRemoveCustomExpense(item.id)}
-                      className="text-slate-400 hover:text-rose-500 p-0.5 transition-colors"
+                      className="text-slate-400 hover:text-rose-500 p-1 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-colors"
                       title="Remover despesa"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -200,7 +202,7 @@ export const ExtraExpensesSection: React.FC<ExtraExpensesSectionProps> = ({
               placeholder="Outro custo (ex: Seguro, Descarga...)"
               value={newExpenseName}
               onChange={(e) => setNewExpenseName(e.target.value)}
-              className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+              className="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
             />
             <input
               type="number"
@@ -209,11 +211,11 @@ export const ExtraExpensesSection: React.FC<ExtraExpensesSectionProps> = ({
               placeholder="R$ 0,00"
               value={newExpenseValue}
               onChange={(e) => setNewExpenseValue(e.target.value)}
-              className="w-24 px-2.5 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+              className="w-24 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
             />
             <button
               type="submit"
-              className="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center gap-1 shadow-sm transition-colors"
+              className="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-sky-600/20 transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Adicionar</span>

@@ -25,10 +25,10 @@ export const VehicleSelector: React.FC<VehicleSelectorProps> = ({
   onChangeFuelPrice,
 }) => {
   const getIcon = (id: VehicleCategory) => {
-    if (id === 'moto') return <Bike className="w-4 h-4" />;
-    if (id === 'onibus_2' || id === 'onibus_3') return <Bus className="w-4 h-4" />;
-    if (id.startsWith('caminhao') || id === 'van') return <Truck className="w-4 h-4" />;
-    return <Car className="w-4 h-4" />;
+    if (id === 'moto') return <Bike className="w-4 h-4 text-sky-500" />;
+    if (id === 'onibus_2' || id === 'onibus_3') return <Bus className="w-4 h-4 text-amber-500" />;
+    if (id.startsWith('caminhao') || id === 'van') return <Truck className="w-4 h-4 text-emerald-500" />;
+    return <Car className="w-4 h-4 text-sky-500" />;
   };
 
   const handleFuelChange = (newFuel: FuelType) => {
@@ -39,20 +39,24 @@ export const VehicleSelector: React.FC<VehicleSelectorProps> = ({
   };
 
   return (
-    <div className="space-y-3.5 p-4 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 shadow-sm">
+    <div className="space-y-4 p-4 sm:p-5 rounded-3xl bg-white dark:bg-[#11192e] border border-slate-200/90 dark:border-slate-800/90 shadow-lg shadow-slate-900/5 dark:shadow-black/40 transition-all">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-          <Truck className="w-4 h-4 text-brand-500" />
-          Veículo & Combustível
-        </h3>
-        <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center">
+            <Truck className="w-4 h-4" />
+          </div>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+            Veículo & Combustível
+          </h3>
+        </div>
+        <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-sky-50 text-sky-700 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-200 dark:border-sky-800/60 shadow-sm">
           Pedágio: {selectedVehicle.tollMultiplier.toFixed(1)}x
         </span>
       </div>
 
       {/* Vehicle Category Select */}
       <div>
-        <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+        <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">
           Categoria do Veículo
         </label>
         <div className="relative">
@@ -62,7 +66,7 @@ export const VehicleSelector: React.FC<VehicleSelectorProps> = ({
               const found = VEHICLE_PRESETS[e.target.value];
               if (found) onSelectVehicle(found);
             }}
-            className="w-full pl-9 pr-8 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none appearance-none cursor-pointer"
+            className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white font-semibold focus:ring-2 focus:ring-sky-500 focus:outline-none appearance-none cursor-pointer shadow-sm transition-all"
           >
             <optgroup label="Passeio & Leves">
               <option value="carro">🚗 Carro de Passeio / SUV (1.0x)</option>
@@ -82,24 +86,24 @@ export const VehicleSelector: React.FC<VehicleSelectorProps> = ({
               <option value="caminhao_7_9">🚛 Rodotrem / Treminhão (7 a 9 eixos - 8.0x)</option>
             </optgroup>
           </select>
-          <div className="absolute left-3 top-2.5 text-brand-500 pointer-events-none">
+          <div className="absolute left-3.5 top-3 pointer-events-none">
             {getIcon(selectedVehicle.id)}
           </div>
         </div>
       </div>
 
       {/* Fuel Type & Consumption & Price in 3 columns */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Fuel Type */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
             <Fuel className="w-3.5 h-3.5 text-amber-500" />
             Combustível
           </label>
           <select
             value={fuelType}
             onChange={(e) => handleFuelChange(e.target.value as FuelType)}
-            className="w-full px-2.5 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none cursor-pointer"
+            className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none cursor-pointer shadow-sm"
           >
             {Object.entries(DEFAULT_FUEL_PRICES).map(([key, item]) => (
               <option key={key} value={key}>
@@ -111,7 +115,7 @@ export const VehicleSelector: React.FC<VehicleSelectorProps> = ({
 
         {/* Consumption (km/l) */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
             <Gauge className="w-3.5 h-3.5 text-sky-500" />
             Consumo (km/l)
           </label>
@@ -122,13 +126,13 @@ export const VehicleSelector: React.FC<VehicleSelectorProps> = ({
             max="100"
             value={customConsumption}
             onChange={(e) => onChangeConsumption(parseFloat(e.target.value) || 1)}
-            className="w-full px-2.5 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none"
+            className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none shadow-sm"
           />
         </div>
 
         {/* Fuel Price (R$/l) */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
             <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
             Preço ({DEFAULT_FUEL_PRICES[fuelType]?.unit || 'R$/L'})
           </label>
@@ -139,7 +143,7 @@ export const VehicleSelector: React.FC<VehicleSelectorProps> = ({
             max="50"
             value={fuelPrice}
             onChange={(e) => onChangeFuelPrice(parseFloat(e.target.value) || 0)}
-            className="w-full px-2.5 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none"
+            className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none shadow-sm"
           />
         </div>
       </div>

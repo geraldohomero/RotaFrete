@@ -77,7 +77,7 @@ export default function App() {
   const hasRoute = Boolean(trip.origin && trip.destination && trip.distanceKm > 0);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 transition-colors duration-200">
       {/* App Navigation Header */}
       <Header
         isDark={isDark}
@@ -88,8 +88,8 @@ export default function App() {
       {/* Main Grid Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
         {trip.routeError && (
-          <div className="mb-4 p-3.5 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900/60 rounded-2xl text-xs text-rose-800 dark:text-rose-200 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0" />
+          <div className="mb-4 p-4 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900/60 rounded-3xl text-xs font-semibold text-rose-800 dark:text-rose-200 flex items-center gap-2.5 shadow-sm">
+            <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0" />
             <span>{trip.routeError}</span>
           </div>
         )}
@@ -98,7 +98,7 @@ export default function App() {
           {/* Left Column: Form Controls & Inputs (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
             {/* 1. Origin & Destination Autocomplete */}
-            <div className="p-4 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-[#11192e] border border-slate-200/90 dark:border-slate-800/90 shadow-lg shadow-slate-900/5 dark:shadow-black/40">
               <AddressInput
                 origin={trip.origin}
                 destination={trip.destination}
@@ -164,7 +164,7 @@ export default function App() {
             )}
 
             {/* Interactive Leaflet Map */}
-            <div className="w-full h-[460px] lg:h-[500px]">
+            <div className="w-full h-[460px] lg:h-[520px]">
               <TripMap
                 origin={trip.origin}
                 destination={trip.destination}
@@ -172,6 +172,7 @@ export default function App() {
                 tollBooths={trip.tollBooths}
                 routeMode={trip.routeMode}
                 isLoading={trip.isLoadingRoute}
+                isDark={isDark}
                 onToggleToll={trip.toggleTollActive}
               />
             </div>

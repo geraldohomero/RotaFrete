@@ -103,12 +103,12 @@ export const AddressInput: React.FC<AddressInputProps> = ({
     <div className="space-y-3">
       {/* Origin Input */}
       <div ref={originWrapperRef} className="relative">
-        <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-          Origem
+        <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5 flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></span>
+          <span>Origem</span>
         </label>
         <div className="relative flex items-center">
-          <div className="absolute left-3 text-emerald-500 pointer-events-none">
+          <div className="absolute left-3.5 text-emerald-500 pointer-events-none">
             <MapPin className="w-4 h-4" />
           </div>
           <input
@@ -121,11 +121,11 @@ export const AddressInput: React.FC<AddressInputProps> = ({
             onFocus={() => {
               if (originSuggestions.length > 0) setIsOriginOpen(true);
             }}
-            placeholder="Ex: São Paulo, SP ou Endereço..."
-            className="w-full pl-9 pr-8 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all shadow-sm"
+            placeholder="Digite a cidade de partida (ex: São Paulo, SP)..."
+            className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-medium focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all shadow-sm"
           />
           {isLoadingOrigin ? (
-            <div className="absolute right-3 text-slate-400 animate-spin">
+            <div className="absolute right-3.5 text-slate-400 animate-spin">
               <Loader2 className="w-4 h-4" />
             </div>
           ) : originQuery ? (
@@ -135,7 +135,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
                 setOriginQuery('');
                 onSelectOrigin(null);
               }}
-              className="absolute right-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5"
+              className="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -144,7 +144,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
 
         {/* Origin Autocomplete Suggestions Dropdown */}
         {isOriginOpen && originSuggestions.length > 0 && (
-          <ul className="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-56 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50">
+          <ul className="absolute z-50 left-0 right-0 mt-1.5 bg-white dark:bg-[#151d33] border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/80 backdrop-blur-md">
             {originSuggestions.map((item, idx) => (
               <li
                 key={idx}
@@ -153,10 +153,10 @@ export const AddressInput: React.FC<AddressInputProps> = ({
                   setOriginQuery(item.address);
                   setIsOriginOpen(false);
                 }}
-                className="px-3 py-2.5 text-xs text-slate-800 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-brand-950/50 cursor-pointer flex items-start gap-2 transition-colors"
+                className="px-3.5 py-3 text-xs text-slate-800 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-sky-950/60 cursor-pointer flex items-start gap-2.5 transition-colors"
               >
-                <Navigation className="w-3.5 h-3.5 text-brand-500 mt-0.5 shrink-0" />
-                <span className="line-clamp-2">{item.address}</span>
+                <Navigation className="w-4 h-4 text-sky-500 mt-0.5 shrink-0" />
+                <span className="line-clamp-2 font-medium">{item.address}</span>
               </li>
             ))}
           </ul>
@@ -168,7 +168,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         <button
           type="button"
           onClick={onSwap}
-          className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:scale-105 active:scale-95"
+          className="p-2 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-[#18233d] dark:hover:bg-[#202e52] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shadow-md shadow-black/5 dark:shadow-black/30 transition-all hover:scale-110 active:scale-95"
           title="Inverter Origem e Destino"
           aria-label="Inverter Origem e Destino"
         >
@@ -178,12 +178,12 @@ export const AddressInput: React.FC<AddressInputProps> = ({
 
       {/* Destination Input */}
       <div ref={destWrapperRef} className="relative">
-        <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-          Destino
+        <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5 flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50"></span>
+          <span>Destino</span>
         </label>
         <div className="relative flex items-center">
-          <div className="absolute left-3 text-rose-500 pointer-events-none">
+          <div className="absolute left-3.5 text-rose-500 pointer-events-none">
             <MapPin className="w-4 h-4" />
           </div>
           <input
@@ -196,11 +196,11 @@ export const AddressInput: React.FC<AddressInputProps> = ({
             onFocus={() => {
               if (destSuggestions.length > 0) setIsDestOpen(true);
             }}
-            placeholder="Ex: Rio de Janeiro, RJ ou Endereço..."
-            className="w-full pl-9 pr-8 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all shadow-sm"
+            placeholder="Digite a cidade de destino (ex: Rio de Janeiro, RJ)..."
+            className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-[#162039] text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-medium focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all shadow-sm"
           />
           {isLoadingDest ? (
-            <div className="absolute right-3 text-slate-400 animate-spin">
+            <div className="absolute right-3.5 text-slate-400 animate-spin">
               <Loader2 className="w-4 h-4" />
             </div>
           ) : destQuery ? (
@@ -210,7 +210,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
                 setDestQuery('');
                 onSelectDestination(null);
               }}
-              className="absolute right-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5"
+              className="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -219,7 +219,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
 
         {/* Destination Autocomplete Suggestions Dropdown */}
         {isDestOpen && destSuggestions.length > 0 && (
-          <ul className="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-56 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50">
+          <ul className="absolute z-50 left-0 right-0 mt-1.5 bg-white dark:bg-[#151d33] border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/80 backdrop-blur-md">
             {destSuggestions.map((item, idx) => (
               <li
                 key={idx}
@@ -228,10 +228,10 @@ export const AddressInput: React.FC<AddressInputProps> = ({
                   setDestQuery(item.address);
                   setIsDestOpen(false);
                 }}
-                className="px-3 py-2.5 text-xs text-slate-800 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-brand-950/50 cursor-pointer flex items-start gap-2 transition-colors"
+                className="px-3.5 py-3 text-xs text-slate-800 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-sky-950/60 cursor-pointer flex items-start gap-2.5 transition-colors"
               >
-                <Navigation className="w-3.5 h-3.5 text-brand-500 mt-0.5 shrink-0" />
-                <span className="line-clamp-2">{item.address}</span>
+                <Navigation className="w-4 h-4 text-sky-500 mt-0.5 shrink-0" />
+                <span className="line-clamp-2 font-medium">{item.address}</span>
               </li>
             ))}
           </ul>
