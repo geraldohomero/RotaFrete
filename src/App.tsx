@@ -136,6 +136,8 @@ export default function App() {
               onToggleToll={trip.toggleTollActive}
               onAddCustomToll={trip.addCustomToll}
               onRemoveToll={trip.removeToll}
+              vehicleMultiplier={trip.vehicle.tollMultiplier}
+              totalDistanceKm={trip.distanceKm}
             />
 
             {/* 5. Extra Expenses Accordion */}

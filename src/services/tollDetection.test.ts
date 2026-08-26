@@ -3,11 +3,11 @@ import {
   detectTollsOnRoute,
   createCustomTollBooth,
   getDistanceFromLatLonInKm,
+  searchTollPlazas,
 } from './tollDetection';
 
 describe('Toll Detection Service', () => {
   it('calculates Haversine distance correctly', () => {
-    // Distance between SP (-23.5505, -46.6333) and Rio (-22.9068, -43.1729) ~ 357 km
     const dist = getDistanceFromLatLonInKm(-23.5505, -46.6333, -22.9068, -43.1729);
     expect(dist).toBeGreaterThan(350);
     expect(dist).toBeLessThan(370);
@@ -25,14 +25,20 @@ describe('Toll Detection Service', () => {
     const detectedCar = detectTollsOnRoute(mockRouteCoordinates, 1.0);
     expect(detectedCar.length).toBeGreaterThanOrEqual(2);
 
-    const aruja = detectedCar.find((b) => b.id === 'dutra-aruja');
+    const aruja = detectedCar.find((b) => b.id.includes('dutra-aruja'));
     expect(aruja).toBeDefined();
     expect(aruja?.calculatedPrice).toBe(4.10);
 
     // With 3-axle truck multiplier (3.0x)
     const detectedTruck = detectTollsOnRoute(mockRouteCoordinates, 3.0);
-    const arujaTruck = detectedTruck.find((b) => b.id === 'dutra-aruja');
+    const arujaTruck = detectedTruck.find((b) => b.id.includes('dutra-aruja'));
     expect(arujaTruck?.calculatedPrice).toBe(12.30); // 4.10 * 3
+  });
+
+  it('searches toll plazas across national database', () => {
+    const results = searchTollPlazas('Bandeirantes', 1.0);
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0].name).toContain('Bandeirantes');
   });
 
   it('creates custom toll booths with accurate multipliers', () => {
