@@ -84,10 +84,84 @@ export function getDistanceFromLatLonInKm(
 }
 
 /**
- * Identifies toll plazas along a route coordinate path
- * @param coordinates Array of [longitude, latitude] coordinates along the route
- * @param vehicleMultiplier Multiplier for vehicle category (e.g. 1.0 for car, 3.0 for 3-axle truck)
- * @param distanceKm Total distance of the route in km
+ * Queries OpenStreetMap Overpass API (Free) for real-time toll booths and gantries along the route bbox
+ */
+export async function fetchTollsFromOverpass(
+  coordinates: [number, number][],
+  vehicleMultiplier: number = 1.0
+): Promise<TollBooth[]> {
+  if (!coordinates || coordinates.length < 2) return [];
+
+  try {
+    // Calculate bounding box
+    let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
+    for (const [lng, lat] of coordinates) {
+      if (lat < minLat) minLat = lat;
+      if (lat > maxLat) maxLat = lat;
+      if (lng < minLng) minLng = lng;
+      if (lng > maxLng) maxLng = lng;
+    }
+
+    // Add padding (~2km)
+    minLat -= 0.02;
+    maxLat += 0.02;
+    minLng -= 0.02;
+    maxLng += 0.02;
+
+    const overpassQuery = `[out:json][timeout:8];(node["barrier"="toll_booth"](${minLat},${minLng},${maxLat},${maxLng});node["highway"="toll_gantry"](${minLat},${minLng},${maxLat},${maxLng}););out body;`;
+    const response = await fetch('https://overpass-api.de/api/interpreter', {
+      method: 'POST',
+      body: `data=${encodeURIComponent(overpassQuery)}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+    });
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    if (!data.elements || data.elements.length === 0) return [];
+
+    const detected: TollBooth[] = [];
+    const PROXIMITY_THRESHOLD_KM = 2.0;
+
+    for (const node of data.elements) {
+      const isNearRoute = coordinates.some(([lng, lat]) => {
+        const dist = getDistanceFromLatLonInKm(lat, lng, node.lat, node.lon);
+        return dist <= PROXIMITY_THRESHOLD_KM;
+      });
+
+      if (isNearRoute) {
+        // Match with known toll booth for exact price if available, or use average base rate of R$ 8.50
+        const matchedKnown = KNOWN_TOLL_BOOTHS.find(
+          (k) => getDistanceFromLatLonInKm(k.coordinates.lat, k.coordinates.lng, node.lat, node.lon) <= 3.0
+        );
+
+        const basePrice = matchedKnown ? matchedKnown.basePrice : 8.50;
+        const name = matchedKnown?.name || node.tags?.name || node.tags?.description || `Praça de Pedágio (OSM)`;
+        const highway = matchedKnown?.highway || node.tags?.['addr:street'] || node.tags?.ref || 'Rodovia Tarifada';
+
+        detected.push({
+          id: `osm-toll-${node.id}`,
+          name,
+          highway,
+          coordinates: { lat: node.lat, lng: node.lon },
+          basePrice,
+          calculatedPrice: Number((basePrice * vehicleMultiplier).toFixed(2)),
+          isActive: true,
+        });
+      }
+    }
+
+    return detected;
+  } catch (err) {
+    console.warn('Overpass toll API query skipped, using localized database:', err);
+    return [];
+  }
+}
+
+/**
+ * Identifies toll plazas along a route coordinate path (Combining Overpass API + Local Concessionaire DB)
  */
 export function detectTollsOnRoute(
   coordinates: [number, number][],
@@ -97,10 +171,9 @@ export function detectTollsOnRoute(
   if (!coordinates || coordinates.length === 0) return [];
 
   const detectedBooths: TollBooth[] = [];
-  const PROXIMITY_THRESHOLD_KM = 2.5; // Toll booth within 2.5km of route line
+  const PROXIMITY_THRESHOLD_KM = 2.5;
 
   for (const booth of KNOWN_TOLL_BOOTHS) {
-    // Check if any point on the route is close to this toll booth
     const isNearRoute = coordinates.some(([lng, lat]) => {
       const dist = getDistanceFromLatLonInKm(lat, lng, booth.coordinates.lat, booth.coordinates.lng);
       return dist <= PROXIMITY_THRESHOLD_KM;
@@ -119,9 +192,43 @@ export function detectTollsOnRoute(
     }
   }
 
-  // If no known toll booths were detected but distance is long (> 100km) on highways,
-  // we do not force phantom booths if avoid_tolls is intended, but we provide realistic default if none found.
   return detectedBooths;
+}
+
+/**
+ * Async toll detection combining live Overpass API query and known concessionaires
+ */
+export async function detectTollsOnRouteAsync(
+  coordinates: [number, number][],
+  vehicleMultiplier: number = 1.0
+): Promise<TollBooth[]> {
+  const localBooths = detectTollsOnRoute(coordinates, vehicleMultiplier);
+
+  try {
+    const liveOsmBooths = await fetchTollsFromOverpass(coordinates, vehicleMultiplier);
+
+    // Merge live OSM tolls with local database avoiding duplicates
+    if (liveOsmBooths.length > 0) {
+      const merged = [...localBooths];
+      for (const osmBooth of liveOsmBooths) {
+        const isDuplicate = merged.some(
+          (m) =>
+            getDistanceFromLatLonInKm(
+              m.coordinates.lat,
+              m.coordinates.lng,
+              osmBooth.coordinates.lat,
+              osmBooth.coordinates.lng
+            ) <= 2.5
+        );
+        if (!isDuplicate) {
+          merged.push(osmBooth);
+        }
+      }
+      return merged;
+    }
+  } catch {}
+
+  return localBooths;
 }
 
 /**

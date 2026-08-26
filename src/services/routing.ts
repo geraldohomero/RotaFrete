@@ -1,5 +1,5 @@
 import { Coordinates, RouteMode, TollBooth } from '../types/trip';
-import { detectTollsOnRoute } from './tollDetection';
+import { detectTollsOnRoute, detectTollsOnRouteAsync } from './tollDetection';
 
 export interface RouteResult {
   mode: RouteMode;
@@ -46,8 +46,8 @@ export async function fetchOSRMRoute(
     const durationMinutes = Math.round(selectedRoute.duration / 60);
     const coordinates: [number, number][] = selectedRoute.geometry.coordinates;
 
-    // Detect toll plazas along the route
-    let detectedTolls = detectTollsOnRoute(coordinates, vehicleMultiplier, distanceKm);
+    // Detect toll plazas along the route with Live Overpass API + database
+    let detectedTolls = await detectTollsOnRouteAsync(coordinates, vehicleMultiplier);
 
     // If 'avoid_tolls' mode is selected:
     if (mode === 'avoid_tolls') {
@@ -57,7 +57,7 @@ export async function fetchOSRMRoute(
         let minTolls = detectedTolls.length;
 
         for (const altRoute of data.routes) {
-          const altTolls = detectTollsOnRoute(altRoute.geometry.coordinates, vehicleMultiplier);
+          const altTolls = await detectTollsOnRouteAsync(altRoute.geometry.coordinates, vehicleMultiplier);
           if (altTolls.length < minTolls) {
             minTolls = altTolls.length;
             bestNoTollRoute = altRoute;
@@ -75,7 +75,7 @@ export async function fetchOSRMRoute(
 
     return {
       mode,
-      distanceKm: Number((selectedRoute.distance / 1000).toFixed(1)),
+      distanceKm,
       durationMinutes,
       coordinates: selectedRoute.geometry.coordinates,
       tollBooths: detectedTolls,
