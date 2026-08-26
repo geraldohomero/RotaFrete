@@ -14,11 +14,11 @@ describe('Toll Detection Service', () => {
   });
 
   it('detects toll booths along route coordinates and applies vehicle multipliers', () => {
-    // Route passing near Arujá (-23.4072, -46.3314) and Guararema (-23.3618, -46.0682)
+    // Calibrated coordinates on Dutra near Arujá and Guararema
     const mockRouteCoordinates: [number, number][] = [
       [-46.6333, -23.5505], // SP
-      [-46.3314, -23.4072], // Near Arujá
-      [-46.0682, -23.3618], // Near Guararema
+      [-46.329358, -23.403266], // Calibrated Arujá
+      [-46.015864, -23.300348], // Calibrated Guararema
       [-43.1729, -22.9068], // RJ
     ];
 
