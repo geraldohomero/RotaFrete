@@ -2,7 +2,7 @@
 
 Calculadora de custos de viagem, pedagios, combustivel e despesas operacionais para automoveis, motocicletas, caminhoes e onibus.
 
-![Uploading image.png…]()
+<img width="1337" height="927" alt="image" src="https://github.com/user-attachments/assets/62bda9cb-6c5a-4303-a0b2-fbf9f842cb96" />
 
 ---
 
