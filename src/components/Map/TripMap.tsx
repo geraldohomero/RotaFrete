@@ -8,7 +8,6 @@ import {
 } from './CustomMarkers';
 import { MapController } from './MapController';
 import { formatCurrency } from '../../utils/calculator';
-import { Navigation } from 'lucide-react';
 
 interface TripMapProps {
   origin: LocationPoint | null;
@@ -204,11 +203,6 @@ export const TripMap: React.FC<TripMapProps> = ({
           </>
         )}
       </MapContainer>
-
-      {/* Mode badge overlay */}
-      <div className="absolute top-4 left-4 z-[400] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg border border-slate-200/80 dark:border-slate-700/80 text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
-        <Navigation className="w-3.5 h-3.5 text-sky-500" />
-      </div>
     </div>
   );
 };
